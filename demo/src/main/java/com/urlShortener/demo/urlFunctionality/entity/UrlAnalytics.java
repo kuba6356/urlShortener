@@ -10,23 +10,24 @@ public class UrlAnalytics {
     private String ipAddress;
     private String time;
     private String location;
+
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST
     )
     @JoinColumn(
-            name = "Url_id",
-            referencedColumnName = "id"
+            name = "url_id",
+            referencedColumnName = "urlId"
     )
     private Url url;
 
-    public UrlAnalytics(String ipAddress, String time, String location, Url url) {
+
+    public UrlAnalytics(String ipAddress, String time, String location) {
         this.ipAddress = ipAddress;
         this.time = time;
         this.location = location;
-        this.url = url;
     }
-    public UrlAnalytics(){}
 
+    public UrlAnalytics(){}
 
     public Long getId() {
         return id;
@@ -60,14 +61,6 @@ public class UrlAnalytics {
         this.location = location;
     }
 
-    public Url getUrl() {
-        return url;
-    }
-
-    public void setUrl(Url url) {
-        this.url = url;
-    }
-
     @Override
     public String toString() {
         return "UrlAnalytics{" +
@@ -75,7 +68,6 @@ public class UrlAnalytics {
                 ", ipAddress='" + ipAddress + '\'' +
                 ", time='" + time + '\'' +
                 ", location='" + location + '\'' +
-                ", url=" + url +
                 '}';
     }
 

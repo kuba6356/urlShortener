@@ -12,9 +12,9 @@ public interface UrlService {
 
     void deleteAllUrlAnalyticsData(Long id);
 
-    void updateUrl(Long id, String newLongUrl);
+    String updateUrl(Long id, String newLongUrl, User user);
 
-    void deleteUrl(java.lang.Long id);
+    String deleteUrl(Long id, User loggedInUser);
 
     String redirectClick(Long id, HttpServletRequest request);
 }

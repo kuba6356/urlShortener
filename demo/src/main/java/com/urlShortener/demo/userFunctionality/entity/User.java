@@ -1,38 +1,46 @@
 package com.urlShortener.demo.userFunctionality.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.urlShortener.demo.urlFunctionality.entity.Url;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
     private String email;
     private String username;
     private String passwordHash;
     private boolean activated = false;
+    @OneToMany(
+            cascade = CascadeType.REMOVE
+    )
+    @JoinColumn(
+            name = "user_id",
+            referencedColumnName = "userId"
+    )
+    private List<Url> url = new ArrayList<>();
 
-    public User( String email, String username, String passwordHash) {
+    public User(String email, String username, String passwordHash) {
         this.email = email;
         this.username = username;
-        this.passwordHash = bCryptPasswordEncoder.encode(passwordHash);
+        this.passwordHash = passwordHash;
     }
 
     public User() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -56,19 +64,39 @@ public class User {
     }
 
     public void setPasswordHash(String passwordHash) {
-        this.passwordHash = bCryptPasswordEncoder.encode(passwordHash);
+        this.passwordHash = passwordHash;
     }
     public void changeToActive(){
         this.activated = true;
     }
 
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public List<Url> getUrl() {
+        return url;
+    }
+
+    public void setUrl(List<Url> url) {
+        this.url = url;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "userId=" + userId +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
+                ", activated=" + activated +
+                ", url=" + url +
                 '}';
+    }
+
+    public void addUrl(Url url){
+        List<Url> x = getUrl();
+        x.add(url);
+        setUrl(x);
     }
 }

@@ -4,22 +4,37 @@ import com.urlShortener.demo.userFunctionality.entity.User;
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Url {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long urlId;
     private String longLink;
     private String shortLink;
     private Integer clickCounter;
     private LocalTime createdAt;
+
+    public List<UrlAnalytics> getUrlAnalytics() {
+        return urlAnalytics;
+    }
+
+    @OneToMany(
+            cascade = CascadeType.REMOVE
+    )
+    @JoinColumn(
+            name = "url_id",
+            referencedColumnName = "urlId"
+    )
+    private List<UrlAnalytics> urlAnalytics ;
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST
     )
     @JoinColumn(
             name = "user_id",
-            referencedColumnName = "id"
+            referencedColumnName = "userId"
     )
     private User user;
 
@@ -29,14 +44,31 @@ public class Url {
         this.createdAt = LocalTime.now();
         this.user = user;
     }
-    public Url(){}
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return user.getUserId();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+
+    public void setUrlAnalytics(List<UrlAnalytics> urlAnalytics) {
+        this.urlAnalytics = urlAnalytics;
+    }
+
+    public void addUrlAnalytics(UrlAnalytics urlAnalytics) {
+        List<UrlAnalytics> x = new ArrayList<>();
+        x = getUrlAnalytics();
+        x.add(urlAnalytics);
+        setUrlAnalytics(x);
+    }
+
+    public Url(){}
+
+    public Long getUrlId() {
+        return urlId;
+    }
+
+    public void setUrlId(Long urlId) {
+        this.urlId = urlId;
     }
 
     public String getLongLink() {
@@ -76,22 +108,16 @@ public class Url {
     @Override
     public String toString() {
         return "Url{" +
-                "id=" + id +
+                "urlId=" + urlId +
                 ", longLink='" + longLink + '\'' +
                 ", shortLink='" + shortLink + '\'' +
                 ", clickCounter=" + clickCounter +
                 ", createdAt=" + createdAt +
-                ", user=" + user +
+                ", urlAnalytics=" + urlAnalytics +
                 '}';
     }
 
-    public User getUser() {
-        return user;
-    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public LocalTime getCreatedAt() {
         return createdAt;

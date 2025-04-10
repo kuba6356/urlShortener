@@ -18,11 +18,21 @@ public class UrlController {
 
     private User loggedInUser;
 
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(User loggedInUser) {
+        this.loggedInUser = loggedInUser;
+    }
     //POST
 
     @PostMapping("/create")
 
     public ResponseEntity<String> createNewShortUrl(@RequestParam String longUrl){
+            if(loggedInUser == null){
+                return new ResponseEntity<>("you must login first to create a new url", HttpStatus.FORBIDDEN);
+            }
             if (longUrl == null || longUrl.trim().isEmpty()) {
                 return new ResponseEntity<>("provided link cannot be empty", HttpStatus.BAD_REQUEST);
             }
@@ -36,10 +46,16 @@ public class UrlController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateUrl(@PathVariable Long id, @RequestParam String newLongUrl){
+        if(loggedInUser == null){
+            return new ResponseEntity<>("you must login first to create a new url", HttpStatus.FORBIDDEN);
+        }
             if ((id == null) || (newLongUrl == null || newLongUrl.trim().isEmpty())) {
                 return new ResponseEntity<>("provided links cannot be empty", HttpStatus.BAD_REQUEST);
             }
-            urlService.updateUrl(id, newLongUrl);
+            String returnStatus = urlService.updateUrl(id, newLongUrl, loggedInUser);
+            if(returnStatus.equalsIgnoreCase("Invalid User")){
+                return new ResponseEntity<>("Please provide a link that is related to your account", HttpStatus.FORBIDDEN);
+            }
             return new ResponseEntity<>("Url has been updated successfully",HttpStatus.OK);
 
     }
@@ -48,10 +64,20 @@ public class UrlController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUrl(@PathVariable Long id){
+        if(loggedInUser == null){
+            return new ResponseEntity<>("you must login first to create a new url", HttpStatus.FORBIDDEN);
+        }
             if(id== null){
                 return new ResponseEntity<>("Sorry This link doesn't exist", HttpStatus.NOT_FOUND);
             }
-            urlService.deleteUrl(id);
+
+            String returnStatus = urlService.deleteUrl(id, loggedInUser);
+            if(returnStatus.equalsIgnoreCase("Invalid User")){
+                return new ResponseEntity<>("Please provide a link that is related to your account", HttpStatus.FORBIDDEN);
+            }
+            if(returnStatus.equalsIgnoreCase("Not Activated")){
+                return new ResponseEntity<>("Please activate your account first", HttpStatus.FORBIDDEN);
+            }
             return new ResponseEntity<>("Url Deleted Successfully", HttpStatus.OK);
     }
 
