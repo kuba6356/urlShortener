@@ -2,9 +2,11 @@ package com.urlShortener.demo.userFunctionality.entity;
 
 import com.urlShortener.demo.urlFunctionality.entity.Url;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,9 +33,10 @@ public class User {
         this.username = username;
         this.passwordHash = passwordHash;
     }
-
     public User() {
     }
+
+
 
     public Long getUserId() {
         return userId;
@@ -59,7 +62,8 @@ public class User {
         this.username = username;
     }
 
-    public String getPasswordHash() {
+
+    public String getPassword() {
         return passwordHash;
     }
 
@@ -99,4 +103,5 @@ public class User {
         x.add(url);
         setUrl(x);
     }
+
 }

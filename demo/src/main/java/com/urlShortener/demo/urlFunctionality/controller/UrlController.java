@@ -3,7 +3,11 @@ package com.urlShortener.demo.urlFunctionality.controller;
 import com.urlShortener.demo.urlFunctionality.entity.Url;
 import com.urlShortener.demo.urlFunctionality.service.UrlService;
 import com.urlShortener.demo.userFunctionality.entity.User;
+import com.urlShortener.demo.userFunctionality.repository.UserRepository;
+import com.urlShortener.demo.userFunctionality.service.JwtService;
+import com.urlShortener.demo.userFunctionality.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +20,22 @@ public class UrlController {
     @Autowired
     private UrlService urlService;
 
-    private User loggedInUser;
+    @Autowired
+    private UserService userService;
 
-    public User getLoggedInUser() {
-        return loggedInUser;
-    }
+    @Autowired
+    private JwtService jwtService;
 
-    public void setLoggedInUser(User loggedInUser) {
-        this.loggedInUser = loggedInUser;
-    }
+    @Autowired
+    private UserRepository userRepository;
+
     //POST
 
     @PostMapping("/create")
 
-    public ResponseEntity<String> createNewShortUrl(@RequestParam String longUrl){
+    public ResponseEntity<String> createNewShortUrl(@RequestParam String longUrl, HttpServletResponse httpServletResponse){
+            User loggedInUser = userRepository.findByUsername(jwtService.extractUserName(httpServletResponse.getHeader("Authorization")));
+            User user = null;
             if(loggedInUser == null){
                 return new ResponseEntity<>("you must login first to create a new url", HttpStatus.FORBIDDEN);
             }
@@ -45,7 +51,8 @@ public class UrlController {
     //UPDATE
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateUrl(@PathVariable Long id, @RequestParam String newLongUrl){
+    public ResponseEntity<String> updateUrl(@PathVariable Long id, @RequestParam String newLongUrl, HttpServletResponse response){
+        User loggedInUser = userRepository.findByUsername(jwtService.extractUserName(response.getHeader("Authorization")));
         if(loggedInUser == null){
             return new ResponseEntity<>("you must login first to create a new url", HttpStatus.FORBIDDEN);
         }
@@ -63,7 +70,8 @@ public class UrlController {
     //DELETE
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUrl(@PathVariable Long id){
+    public ResponseEntity<String> deleteUrl(@PathVariable Long id, HttpServletResponse response){
+        User loggedInUser = userRepository.findByUsername(jwtService.extractUserName(response.getHeader("Authorization")));
         if(loggedInUser == null){
             return new ResponseEntity<>("you must login first to create a new url", HttpStatus.FORBIDDEN);
         }
@@ -91,7 +99,7 @@ public class UrlController {
 
     //REDIRECT
 
-    @RequestMapping("{id}")
+    @RequestMapping("/r/{id}")
     public RedirectView RedirectToLongLink(@PathVariable Long id, HttpServletRequest request){
         return new RedirectView(urlService.redirectClick(id, request));
     }

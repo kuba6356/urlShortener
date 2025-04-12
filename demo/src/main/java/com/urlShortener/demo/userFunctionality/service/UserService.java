@@ -2,8 +2,11 @@ package com.urlShortener.demo.userFunctionality.service;
 
 import com.urlShortener.demo.userFunctionality.entity.User;
 import com.urlShortener.demo.userFunctionality.entity.ValidationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public interface UserService {
+
+    PasswordEncoder encoder();
 
     void sentValidationEmail(ValidationToken validationToken, User user);
 
@@ -11,9 +14,15 @@ public interface UserService {
 
     String validateNewUser(String code);
 
-    String login(String emailOrUsername, String password);
+    String login(User user);
 
     User findUserById(Long id);
 
     String changePasswordWithExisting(String password, String oldPassword, User loggedInUser);
+
+    String ressetPasswordWithToken(String emailOrUsername);
+
+    String checkPasswordValidationCode(String code, String password);
+
+
 }
