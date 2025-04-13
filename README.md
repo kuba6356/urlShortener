@@ -13,8 +13,8 @@ A Spring Boot application for shortening URLs with user authentication, analytic
 
 ## Technologies
 
-- Java 17
-- Spring Boot 3.x
+- Java 24
+- Spring Boot 3.4.4
 - Spring Security
 - JWT Authentication
 - Hibernate/JPA
