@@ -66,21 +66,33 @@ Configuration
 
 Required application.properties settings:
 # Database
+
 spring.datasource.url=jdbc:h2:mem:testdb
+
 spring.datasource.driverClassName=org.h2.Driver
+
 spring.datasource.username=sa
+
 spring.datasource.password=
+
 spring.h2.console.enabled=true
 
 # JWT
+
 jwt.secret=your-secret-key-here
 
 # Email
+
 spring.mail.host=smtp.example.com
+
 spring.mail.port=587
+
 spring.mail.username=your-email@example.com
+
 spring.mail.password=your-email-password
+
 spring.mail.properties.mail.smtp.auth=true
+
 spring.mail.properties.mail.smtp.starttls.enable=true
 
 Dependencies
