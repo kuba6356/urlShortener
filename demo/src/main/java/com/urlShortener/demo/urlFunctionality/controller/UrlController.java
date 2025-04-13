@@ -118,7 +118,7 @@ public class UrlController {
         if(url == null){
             throw new ContentUnavailableInvalidUserException(INVALID_USER);
         }
-        return new ResponseEntity<>(urlService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(url, HttpStatus.OK);
 
     }
 
