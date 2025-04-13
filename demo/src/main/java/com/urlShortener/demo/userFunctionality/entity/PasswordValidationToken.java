@@ -2,6 +2,8 @@ package com.urlShortener.demo.userFunctionality.entity;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -14,7 +16,7 @@ public class PasswordValidationToken {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long passwordValidationTokenId;
     private String token;
-    private Date expirationDate;
+    private Instant expirationDate;
 
     @OneToOne
     @JoinColumn(
@@ -51,19 +53,16 @@ public class PasswordValidationToken {
         this.token = token;
     }
 
-    public Date getExpirationDate() {
+    public Instant getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(Instant expirationDate) {
         this.expirationDate = expirationDate;
     }
 
-    public Date calculateExpirationDate(int expirationTimeInMinutes){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE, expirationTimeInMinutes);
-        return new Date(calendar.getTime().getTime());
+    public Instant calculateExpirationDate(int expirationTimeInMinutes){
+        return Instant.now().plus(expirationTimeInMinutes, ChronoUnit.MINUTES);
     }
 
     @Override

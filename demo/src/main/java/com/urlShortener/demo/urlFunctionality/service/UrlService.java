@@ -17,4 +17,8 @@ public interface UrlService {
     String deleteUrl(Long id, User loggedInUser);
 
     String redirectClick(Long id, HttpServletRequest request);
+
+    String encode(Long id);
+
+    Url getUrl(Long id, User loggedInUser);
 }

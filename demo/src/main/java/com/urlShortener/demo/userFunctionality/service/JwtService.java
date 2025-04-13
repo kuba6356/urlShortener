@@ -1,32 +1,25 @@
 package com.urlShortener.demo.userFunctionality.service;
 
+import com.urlShortener.demo.urlFunctionality.service.UrlServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
-    String secretKey = "";
-    public JwtService(){
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGen.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
-    }
+    private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
+
+
+    String secretKey = "RRmeSnSPUexwupf4hUsPBUZEuY8IANrTIThpOTxKNDk";
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()

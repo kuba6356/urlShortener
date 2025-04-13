@@ -3,7 +3,7 @@ package com.urlShortener.demo.urlFunctionality.entity;
 import com.urlShortener.demo.userFunctionality.entity.User;
 import jakarta.persistence.*;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class Url {
     private String longLink;
     private String shortLink;
     private Integer clickCounter;
-    private LocalTime createdAt;
+    private LocalDateTime createdAt;
 
     public List<UrlAnalytics> getUrlAnalytics() {
         return urlAnalytics;
@@ -41,7 +41,7 @@ public class Url {
     public Url(String longLink, User user) {
         this.longLink = longLink;
         this.clickCounter = 0;
-        this.createdAt = LocalTime.now();
+        this.createdAt = LocalDateTime.now();
         this.user = user;
     }
 
@@ -95,16 +95,6 @@ public class Url {
         this.clickCounter = clickCounter;
     }
 
-    public String encode(Long id){
-        final String Characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        StringBuilder shortUrl = new StringBuilder();
-        while(id > 0){
-            shortUrl.append(Characters.charAt((int) (id % 62)));
-            id/= 62;
-        }
-        return shortUrl.toString();
-    }
-
     @Override
     public String toString() {
         return "Url{" +
@@ -119,11 +109,11 @@ public class Url {
 
 
 
-    public LocalTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }

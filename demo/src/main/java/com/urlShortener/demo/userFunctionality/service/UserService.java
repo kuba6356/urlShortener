@@ -6,8 +6,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public interface UserService {
 
-    PasswordEncoder encoder();
-
     void sentValidationEmail(ValidationToken validationToken, User user);
 
     User registerUser(User user);

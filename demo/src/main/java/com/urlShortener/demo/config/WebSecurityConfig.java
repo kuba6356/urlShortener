@@ -1,6 +1,9 @@
 package com.urlShortener.demo.config;
 
 import com.urlShortener.demo.config.filter.JwtFilter;
+import com.urlShortener.demo.urlFunctionality.service.UrlServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +25,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -45,13 +49,11 @@ public class WebSecurityConfig {
             "resetPasswordToken*",
             "/login"
     };
-    //creates this object so that it will be accessible outside this class
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(withDefaults())
                 .csrf(customizer -> customizer.disable())
-                .httpBasic(withDefaults())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth

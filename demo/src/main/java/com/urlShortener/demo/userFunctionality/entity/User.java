@@ -99,9 +99,7 @@ public class User {
     }
 
     public void addUrl(Url url){
-        List<Url> x = getUrl();
-        x.add(url);
-        setUrl(x);
+        this.url.add(url);
     }
 
 }
