@@ -52,7 +52,7 @@ public class UrlServiceImpl implements UrlService {
 
 
     @Override
-    public Url getUrl(Long id, User loggedInUser) {
+    public Url getUrl(Long id, User loggedInUser) 
         if(findById(id).getUserId() == loggedInUser.getUserId()){
             return findById(id);
         }
@@ -77,7 +77,7 @@ public class UrlServiceImpl implements UrlService {
         try {
             Url url = findById(id);
 
-            if (userRepository.findByEmail(user.getEmail()).getUserId().equals(url.getUserId())) {
+            if (!user.getUserId().equals(url.getUserId())) {
                 return "Invalid User";
             }
             deleteAllUrlAnalyticsData(id);
@@ -95,7 +95,7 @@ public class UrlServiceImpl implements UrlService {
     public String deleteUrl(Long id, User loggedInUser) {
         try {
             Url url = findById(id);
-            if (userRepository.findByEmail(loggedInUser.getEmail()).getUserId().equals(url.getUserId())) {
+            if (!user.getUserId().equals(url.getUserId())) {
                 return "Invalid User";
             }
             deleteAllUrlAnalyticsData(id);
